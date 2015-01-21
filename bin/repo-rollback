@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+import time
+import os
+import sys
+import shutil
+import subprocess
+from optparse import OptionParser
+
+def shellout(command):
+    print command
+    retcode = os.system(command)
+    if not retcode == 0:
+        sys.exit(1)
+
+def run(name, options):
+    repo = "%s-%s" % (options.parent, options.env)
+
+    command = [
+        "pulp-admin rpm repo create",
+        "--repo-id=%s-except-%s" % (repo, name),
+        "--display-name=\"Exception (%s - %s)\"" % (repo, name),
+        "--description=\"Exception (%s - %s)\"" % (repo, name),
+        "--serve-http=true",
+        "--serve-https=false",
+        "--relative-url=/excepts/%s/%s" % ('/'.join(repo.split('-')), name)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo copy all",
+        "--from-repo-id=%s" % (repo),
+        "--to-repo-id=%s-except-%s" % (repo, name),
+        "--not='%s'" %(options.match)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo copy all",
+        "--from-repo-id=%s-snap-%s" % (repo, options.snapshot),
+        "--to-repo-id=%s-except-%s" % (repo, name),
+        "--match='%s'" %(options.match)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo publish run",
+        "--repo-id=%s-except-%s" % (repo, name)
+    ]
+    shellout(' '.join(command))
+
+
+def main():
+    parser = OptionParser(usage="repo-rollback [options] name",
+                          version="repo-rollback 0.1")
+    parser.add_option("-p", "--parent",
+                      dest="parent",
+                      default="",
+                      help="The parent repository")
+    parser.add_option("-s", "--snapshot",
+                      dest="snapshot",
+                      default=time.strftime("%Y%m%d", time.localtime()),
+                      help="Date stamp for snapshot")
+    parser.add_option("-m", "--match",
+                      dest="match",
+                      default="*",
+                      help="Regex match string")
+    parser.add_option("-E", "--environment",
+                      dest="env",
+                      default="prod",
+                      help="Environment")
+    (options, args) = parser.parse_args()
+
+    if options.parent == "":
+        parser.error("--parent is a required argument")
+
+    if len(args) != 1:
+        parser.error("Wrong number of arguments.")
+
+    name = args[0]
+
+    print "Merging to: %s" % (name)
+    print "   - PARENT:    %s" % options.parent
+    print "   - SNAPSHOT:  %s" % options.snapshot
+    print "   - MATCH:     '%s'" % options.match
+
+    run(name, options)
+
+if __name__ == '__main__':
+    main()

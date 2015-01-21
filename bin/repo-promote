@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+REPO=$1
+FROM=$2
+TO=$3
+
+pulp-admin rpm repo copy all \
+  --from-repo-id=$REPO-$FROM \
+  --to-repo-id=$REPO-$TO
+pulp-admin rpm repo publish run --repo-id=$REPO-$TO

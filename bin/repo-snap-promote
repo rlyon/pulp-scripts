@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+import time
+import os
+import sys
+import shutil
+import subprocess
+from optparse import OptionParser
+
+def shellout(command):
+    print command
+    retcode = os.system(command)
+    if not retcode == 0:
+        sys.exit(1)
+
+def run(options):
+    datestamp = time.strftime("%Y%m%d", time.localtime())
+
+    fromrepo = "%s-%s" % (options.parent,options.fromrepo)
+    torepo = "%s-%s" % (options.parent,options.torepo)
+
+    snaprepo = "%s-%s-snap-%s" % (
+        options.parent,
+        options.torepo,
+        datestamp
+    )
+
+    command = [
+        "pulp-admin rpm repo create",
+        "--repo-id=%s" % (snaprepo),
+        "--display-name=\"Snapshot (%s - %s)\"" % (torepo, datestamp),
+        "--description=\"Snapshot (%s - %s)\"" % (torepo, datestamp),
+        "--serve-http=true",
+        "--serve-https=false",
+        "--relative-url=/snaps/%s/%s" % ('/'.join(torepo.split('-')),datestamp)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo copy all",
+        "--from-repo-id=%s" % (torepo),
+        "--to-repo-id=%s" % (snaprepo)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo copy all",
+        "--from-repo-id=%s" % (fromrepo),
+        "--to-repo-id=%s" % (torepo)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo publish run",
+        "--repo-id=%s" % (torepo)
+    ]
+    shellout(' '.join(command))
+
+def main():
+    parser = OptionParser(usage="repo-snap-promote [options]",
+                          version="repo-snap-promote 0.1")
+    parser.add_option("-p", "--parent",
+                      dest="parent",
+                      default="",
+                      help="The parent repository")
+    parser.add_option("-f", "--from",
+                      dest="fromrepo",
+                      default="live",
+                      help="From repo")
+    parser.add_option("-t", "--to",
+                      dest="torepo",
+                      default="dev",
+                      help="To repo")
+    (options, args) = parser.parse_args()
+
+    if options.parent == "":
+        parser.error("--parent is a required argument")
+
+    if len(args) != 0:
+        parser.error("Wrong number of arguments.")
+
+    print "Promoting %s to %s" % (options.fromrepo, options.torepo)
+    print "   - PARENT:    %s" % options.parent
+
+    run(options)
+
+if __name__ == '__main__':
+    main()
