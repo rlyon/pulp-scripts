@@ -1,8 +1,13 @@
 #!/bin/sh
+. /root/.pulp/credentials
 
-pulp-admin login --username admin --password admin
-
-pulp-admin rpm repo sync run --repo-id=rhel-5-server-x86_64-live
-pulp-admin rpm repo sync run --repo-id=epel-6-x86_64-live
+pulp-admin login --username $PULP_USER --password $PULP_PASSWORD
+pulp-admin rpm repo sync run --repo-id=centos-7-base-x86_64-live
+pulp-admin rpm repo sync run --repo-id=centos-7-updates-x86_64-live
 pulp-admin rpm repo sync run --repo-id=centos-6-base-x86_64-live
 pulp-admin rpm repo sync run --repo-id=centos-6-updates-x86_64-live
+pulp-admin rpm repo sync run --repo-id=rhel-6-server-x86_64-live
+pulp-admin rpm repo sync run --repo-id=rhel-6-server-i386-live
+pulp-admin rpm repo sync run --repo-id=rhel-5-server-x86_64-live
+pulp-admin rpm repo sync run --repo-id=rhel-5-server-i386-live
+pulp-admin rpm repo sync run --repo-id=epel-7-x86_64-live
