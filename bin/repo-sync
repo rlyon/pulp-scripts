@@ -12,7 +12,16 @@ function sync_quietly_then_check {
   fi
 }
 
-pulp-admin login --username $PULP_USER --password $PULP_PASSWORD
+function login {
+  pulp-admin login --username $PULP_USER \
+                   --password $PULP_PASSWORD 2>&1 1>>$LOGFILE
+}
+
+function logout {
+  pulp-admin logout 2>&1 1>>$LOGFILE
+}
+
+login
 
 sync_quietly_then_check centos-7-base-x86_64-live
 sync_quietly_then_check centos-7-updates-x86_64-live
@@ -28,4 +37,4 @@ sync_quietly_then_check rhel-5-server-x86_64-live
 sync_quietly_then_check rhel-5-server-i386-live
 sync_quietly_then_check epel-7-x86_64-live
 
-pulp-admin logout
+logout
