@@ -3,6 +3,9 @@
 FROM=$1
 TO=$2
 
+DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
+export PATH=$DIR:$PATH
+
 REPOS=`pulp-admin rpm repo list --summary \
        | grep $FROM | \
        | awk -F' ' '{print $1}' \
