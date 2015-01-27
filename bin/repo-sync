@@ -6,7 +6,7 @@ LOGFILE="/var/log/sync.log"
 touch $LOGFILE
 
 function sync_quietly_then_check {
-  pulp-admin rpm repo sync run --repo-id=$1 2>&1 1>$LOGFILE
+  pulp-admin rpm repo sync run --repo-id=$1 2>&1 1>>$LOGFILE
   if [[ $? -ne 0 ]] ; then
     echo "Failed sync: $1"
   fi
