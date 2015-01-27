@@ -1,0 +1,13 @@
+#!/bin/bash
+
+FROM=$1
+TO=$2
+
+REPOS=`pulp-admin rpm repo list --summary \
+       | grep $FROM | \
+       | awk -F' ' '{print $1}' \
+       | awk -F'-' 'sub(FS $NF, x)'`
+
+for $REPO in $REPOS ; do
+  repo-promote $REPO $FROM $TO
+done
