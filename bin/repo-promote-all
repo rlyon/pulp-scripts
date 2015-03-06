@@ -6,11 +6,11 @@ TO=$2
 DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 export PATH=$DIR:$PATH
 
-REPOS=`pulp-admin rpm repo list --summary \
-       | grep $FROM | \
+REPOS=`pulp-admin rpm repo list --summary
+       | grep $FROM \
        | awk -F' ' '{print $1}' \
        | awk -F'-' 'sub(FS $NF, x)'`
 
-for $REPO in $REPOS ; do
+for REPO in $REPOS ; do
   repo-promote $REPO $FROM $TO
 done

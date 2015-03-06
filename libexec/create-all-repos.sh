@@ -470,3 +470,33 @@ pulp-admin rpm repo create \
     --serve-https=True \
     --relative-url=/prod/epel/7/x86_64 \
     --gpg-key=/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+###############################################################################
+# Fullstack 7 (x86_64)
+###############################################################################
+pulp-admin rpm repo create \
+    --repo-id=fullstack-7-x86_64-live \
+    --display-name="Fullstack 7 x86_64 (Live)" \
+    --description="Fullstack 7 x86_64 (Live)" \
+    --serve-http=True \
+    --serve-https=True \
+    --checksum-type=sha1 \
+    --relative-url=/live/fullstack/7/x86_64
+
+pulp-admin rpm repo create \
+    --repo-id=fullstack-7-x86_64-dev \
+    --display-name="Fullstack 7 x86_64 (Dev)" \
+    --description="Fullstack 7 x86_64 (Dev)" \
+    --serve-http=True \
+    --serve-https=True \
+    --checksum-type=sha1 \
+    --relative-url=/dev/fullstack/7/x86_64
+
+pulp-admin rpm repo create \
+    --repo-id=fullstack-7-x86_64-prod \
+    --display-name="Fullstack 7 x86_64 (Prod)" \
+    --description="Fullstack 7 x86_64 (Prod)" \
+    --serve-http=True \
+    --serve-https=True \
+    --checksum-type=sha1 \
+    --relative-url=/prod/fullstack/7/x86_64
