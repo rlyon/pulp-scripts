@@ -13,6 +13,7 @@ function sync_quietly_then_check {
   echo "Restarting pulp workers to release memory"
   echo "Bad pulp!  Bad pulp!"
   systemctl restart pulp_workers
+  sleep 60
 }
 
 function login {
