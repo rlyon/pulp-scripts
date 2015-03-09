@@ -10,6 +10,9 @@ function sync_quietly_then_check {
   if [[ $? -ne 0 ]] ; then
     echo "Failed sync: $1"
   fi
+  echo "Restarting pulp workers to release memory"
+  echo "Bad pulp!  Bad pulp!"
+  systemctl restart pulp_workers
 }
 
 function login {
