@@ -1,10 +1,20 @@
 #!/bin/bash
+. /root/.pulp/credentials
 
 DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 export PATH=$DIR:$PATH
 
 function updateall {
-  pulp-admin rpm repo update --repo-id=$1 $@
+  pulp-admin rpm repo update --repo-id=$1
+}
+
+function login {
+  pulp-admin login --username $PULP_USER \
+                   --password $PULP_PASSWORD
+}
+
+function logout {
+  pulp-admin logout
 }
 
 login

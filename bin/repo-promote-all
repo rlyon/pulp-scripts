@@ -1,4 +1,5 @@
 #!/bin/bash
+. /root/.pulp/credentials
 
 FROM=$1
 TO=$2
@@ -13,6 +14,15 @@ function promote {
   echo "Bad pulp!  Bad pulp!"
   systemctl restart pulp_workers
   sleep 60
+}
+
+function login {
+  pulp-admin login --username $PULP_USER \
+                   --password $PULP_PASSWORD
+}
+
+function logout {
+  pulp-admin logout
 }
 
 login
