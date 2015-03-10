@@ -6,11 +6,29 @@ TO=$2
 DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 export PATH=$DIR:$PATH
 
-REPOS=`pulp-admin rpm repo list --summary
-       | grep $FROM \
-       | awk -F' ' '{print $1}' \
-       | awk -F'-' 'sub(FS $NF, x)'`
+function promote {
+  repo-promote $1 $2 $3
+  # Make sure to restart workers for memory leak issue
+  echo "Restarting pulp workers to release memory"
+  echo "Bad pulp!  Bad pulp!"
+  systemctl restart pulp_workers
+  sleep 60
+}
 
-for REPO in $REPOS ; do
-  repo-promote $REPO $FROM $TO
-done
+login
+
+promote centos-7-base-x86_64 $FROM $TO
+promote centos-7-updates-x86_64 $FROM $TO
+promote centos-6-base-x86_64 $FROM $TO
+promote centos-6-updates-x86_64 $FROM $TO
+promote centos-5-base-x86_64 $FROM $TO
+promote centos-5-updates-x86_64 $FROM $TO
+promote centos-5.4-base-x86_64 $FROM $TO
+promote centos-5.4-updates-x86_64 $FROM $TO
+promote rhel-6-server-x86_64 $FROM $TO
+promote rhel-6-server-i386 $FROM $TO
+promote rhel-5-server-x86_64 $FROM $TO
+promote rhel-5-server-i386 $FROM $TO
+promote epel-7-x86_64 $FROM $TO
+
+logout
