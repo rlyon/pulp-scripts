@@ -1,6 +1,9 @@
 #!/bin/bash
 . /root/.pulp/credentials
 
+ENVIRO=$1
+shift
+
 DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 export PATH=$DIR:$PATH
 
@@ -19,18 +22,18 @@ function logout {
 
 login
 
-updateall centos-7-base-x86_64 $@
-updateall centos-7-updates-x86_64 $@
-updateall centos-6-base-x86_64 $@
-updateall centos-6-updates-x86_64 $@
-updateall centos-5-base-x86_64 $@
-updateall centos-5-updates-x86_64 $@
-updateall centos-5.4-base-x86_64 $@
-updateall centos-5.4-updates-x86_64 $@
-updateall rhel-6-server-x86_64 $@
-updateall rhel-6-server-i386 $@
-updateall rhel-5-server-x86_64 $@
-updateall rhel-5-server-i386 $@
-updateall epel-7-x86_64 $@
+updateall centos-7-base-x86_64-$ENVIRO $@
+updateall centos-7-updates-x86_64-$ENVIRO $@
+updateall centos-6-base-x86_64-$ENVIRO $@
+updateall centos-6-updates-x86_64-$ENVIRO $@
+updateall centos-5-base-x86_64-$ENVIRO $@
+updateall centos-5-updates-x86_64-$ENVIRO $@
+updateall centos-5.4-base-x86_64-$ENVIRO $@
+updateall centos-5.4-updates-x86_64-$ENVIRO $@
+updateall rhel-6-server-x86_64-$ENVIRO $@
+updateall rhel-6-server-i386-$ENVIRO $@
+updateall rhel-5-server-x86_64-$ENVIRO $@
+updateall rhel-5-server-i386-$ENVIRO $@
+updateall epel-7-x86_64-$ENVIRO $@
 
 logout
