@@ -8,7 +8,9 @@ DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 export PATH=$DIR:$PATH
 
 function updateall {
-  pulp-admin rpm repo update --repo-id=$1
+  repo=$1
+  shift
+  pulp-admin rpm repo update --repo-id=$repo $@
 }
 
 function login {
