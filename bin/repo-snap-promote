@@ -14,12 +14,16 @@ def shellout(command):
 
 def run(options):
     datestamp = time.strftime("%Y%m%d", time.localtime())
-
     fromrepo = "%s-%s" % (options.parent,options.fromrepo)
     torepo = "%s-%s" % (options.parent,options.torepo)
 
-    snaprepo = "%s-%s-snap-%s" % (
-        options.parent,
+    snapurl = "/snap/%s/%s/%s" % (
+        datestamp,
+        options.torepo,
+        '/'.join(torepo.split('-'))
+    )
+
+    snaprepo = "%s-snap-%s" % (
         options.torepo,
         datestamp
     )
@@ -27,11 +31,11 @@ def run(options):
     command = [
         "pulp-admin rpm repo create",
         "--repo-id=%s" % (snaprepo),
-        "--display-name=\"Snapshot (%s - %s)\"" % (torepo, datestamp),
-        "--description=\"Snapshot (%s - %s)\"" % (torepo, datestamp),
+        "--display-name=\"Snapshot %s (%s - %s)\"" % (options.parent, torepo, datestamp),
+        "--description=\"Snapshot %s (%s - %s)\"" % (options.parent, torepo, datestamp),
         "--serve-http=true",
         "--serve-https=false",
-        "--relative-url=/snaps/%s/%s" % ('/'.join(torepo.split('-')),datestamp)
+        "--relative-url=/snaps/%s/%s" % ('/'.join(torepo.split('-')), datestamp)
     ]
     shellout(' '.join(command))
 
