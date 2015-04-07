@@ -17,25 +17,26 @@ def run(options):
     fromrepo = "%s-%s" % (options.parent,options.fromrepo)
     torepo = "%s-%s" % (options.parent,options.torepo)
 
-    snapurl = "/snap/%s/%s/%s" % (
+    snapurl = "/snaps/%s/%s/%s" % (
         datestamp,
         options.torepo,
-        '/'.join(torepo.split('-'))
+        '/'.join(torepo.split('-')[])
     )
 
-    snaprepo = "%s-snap-%s" % (
-        options.torepo,
-        datestamp
+    snaprepo = "snap-%s-%s" % (
+        datestamp,
+        options.parent,
+        options.torepo
     )
 
     command = [
         "pulp-admin rpm repo create",
         "--repo-id=%s" % (snaprepo),
-        "--display-name=\"Snapshot %s (%s - %s)\"" % (options.parent, torepo, datestamp),
-        "--description=\"Snapshot %s (%s - %s)\"" % (options.parent, torepo, datestamp),
+        "--display-name=\"Snapshot %s (%s)\"" % (torepo, datestamp),
+        "--description=\"Snapshot %s (%s)\"" % (torepo, datestamp),
         "--serve-http=true",
         "--serve-https=false",
-        "--relative-url=/snaps/%s/%s" % ('/'.join(torepo.split('-')), datestamp)
+        "--relative-url=%s" % (snapurl)
     ]
     shellout(' '.join(command))
 
