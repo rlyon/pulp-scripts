@@ -1,0 +1,40 @@
+#!/bin/sh
+. /root/.pulp/credentials
+
+LOGFILE="/var/log/sync.log"
+
+touch $LOGFILE
+
+function delete_snap {
+  pulp-admin rpm repo delete --repo-id=snap-$1-$3-$2
+  if [[ $? -ne 0 ]] ; then
+    echo "Failed delete: snap-$1-$3-$2"
+  fi
+}
+
+function login {
+  pulp-admin login --username $PULP_USER \
+                   --password $PULP_PASSWORD
+}
+
+function logout {
+  pulp-admin logout
+}
+
+login
+
+delete_snap $1 $2 centos-7-base-x86_64
+delete_snap $1 $2 centos-7-updates-x86_64
+delete_snap $1 $2 centos-6-base-x86_64
+delete_snap $1 $2 centos-6-updates-x86_64
+delete_snap $1 $2 centos-5-base-x86_64
+delete_snap $1 $2 centos-5-updates-x86_64
+delete_snap $1 $2 centos-5.4-base-x86_64
+delete_snap $1 $2 centos-5.4-updates-x86_64
+delete_snap $1 $2 rhel-6-server-x86_64
+delete_snap $1 $2 rhel-6-server-i386
+delete_snap $1 $2 rhel-5-server-x86_64
+delete_snap $1 $2 rhel-5-server-i386
+delete_snap $1 $2 epel-7-x86_64
+
+logout
