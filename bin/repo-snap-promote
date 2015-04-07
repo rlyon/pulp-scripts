@@ -20,7 +20,7 @@ def run(options):
     snapurl = "/snaps/%s/%s/%s" % (
         datestamp,
         options.torepo,
-        '/'.join(torepo.split('-')[])
+        '/'.join(options.parent.split('-'))
     )
 
     snaprepo = "snap-%s-%s" % (
