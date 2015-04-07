@@ -23,7 +23,7 @@ def run(options):
         '/'.join(options.parent.split('-'))
     )
 
-    snaprepo = "snap-%s-%s" % (
+    snaprepo = "snap-%s-%s-%s" % (
         datestamp,
         options.parent,
         options.torepo
