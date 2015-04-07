@@ -526,7 +526,6 @@ pulp-admin rpm repo create \
     --serve-http=True \
     --serve-https=True \
     --checksum-type=sha1 \
-    --checksum-type=sha1 \
     --relative-url=/live/fullstack/7/x86_64
 
 pulp-admin rpm repo create \
@@ -536,7 +535,6 @@ pulp-admin rpm repo create \
     --serve-http=True \
     --serve-https=True \
     --checksum-type=sha1 \
-    --checksum-type=sha1 \
     --relative-url=/dev/fullstack/7/x86_64
 
 pulp-admin rpm repo create \
@@ -545,6 +543,5 @@ pulp-admin rpm repo create \
     --description="Fullstack 7 x86_64 (Prod)" \
     --serve-http=True \
     --serve-https=True \
-    --checksum-type=sha1 \
     --checksum-type=sha1 \
     --relative-url=/prod/fullstack/7/x86_64

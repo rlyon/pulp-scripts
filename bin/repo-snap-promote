@@ -35,7 +35,8 @@ def run(options):
         "--display-name=\"Snapshot %s (%s)\"" % (torepo, datestamp),
         "--description=\"Snapshot %s (%s)\"" % (torepo, datestamp),
         "--serve-http=true",
-        "--serve-https=false",
+        "--serve-https=true",
+        "--checksum-type=sha1",
         "--relative-url=%s" % (snapurl)
     ]
     shellout(' '.join(command))
@@ -57,6 +58,12 @@ def run(options):
     command = [
         "pulp-admin rpm repo publish run",
         "--repo-id=%s" % (torepo)
+    ]
+    shellout(' '.join(command))
+
+    command = [
+        "pulp-admin rpm repo publish run",
+        "--repo-id=%s" % (snaprepo)
     ]
     shellout(' '.join(command))
 
