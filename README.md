@@ -1,1 +1,1 @@
-# Pulp scripts for repo management
+# pulp-scripts
